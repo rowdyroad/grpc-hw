@@ -1,18 +1,24 @@
-package csv
+package db
 
 import (
+	"github.com/go-pg/pg/v10"
 	"github.com/stretchr/testify/assert"
 	"math"
 	"testing"
 	"time"
 )
 
-func TestNewCSV(t *testing.T) {
-	csv,err := NewCSV("../../../data/meterusage.csv")
+func TestNewDB(t *testing.T) {
+	db,err := NewDB(pg.Options{
+		Addr: "localhost:5432",
+		User: "root",
+		Password: "root",
+		Database: "db",
+	})
 	if err != nil {
 		t.Fatal(err)
 	}
-	count, err := csv.GetTotalCount(
+	count, err := db.GetTotalCount(
 		time.Time{},
 		time.Time{},
 		math.Inf(-1),
@@ -25,7 +31,7 @@ func TestNewCSV(t *testing.T) {
 		return
 	}
 
-	count, err = csv.GetTotalCount(
+	count, err = db.GetTotalCount(
 		time.Date(2019,time.January, 1, 20,45,0,0, time.UTC),
 		time.Date(2019,time.January, 2, 21,45,0, 0, time.UTC),
 		math.Inf(-1),
@@ -38,7 +44,7 @@ func TestNewCSV(t *testing.T) {
 		return
 	}
 
-	count, err = csv.GetTotalCount(
+	count, err = db.GetTotalCount(
 		time.Date(2019,time.January, 1, 20,45,0,0, time.UTC),
 		time.Date(2019,time.January, 2, 21,45,0, 0, time.UTC),
 		190,
@@ -51,8 +57,8 @@ func TestNewCSV(t *testing.T) {
 	if !assert.Equal(t, 41, count) {
 		return
 	}
-	for i := 0; i < count;i+=10 {
-		data,err := csv.GetList(
+	for i := 0; i < count; i+=10 {
+		data,err := db.GetList(
 			time.Date(2019, time.January, 1, 20, 45, 0, 0, time.UTC),
 			time.Date(2019, time.January, 2, 21, 45, 0, 0, time.UTC),
 			190,
@@ -71,7 +77,7 @@ func TestNewCSV(t *testing.T) {
 				return
 			}
 
-			value,err := csv.GetValue(record.Time)
+			value,err := db.GetValue(record.Time)
 			if !assert.NoError(t, err) {
 				return
 			}
@@ -81,11 +87,11 @@ func TestNewCSV(t *testing.T) {
 		}
 	}
 
-	_, err = csv.GetValue(time.Now())
+	_, err = db.GetValue(time.Now())
 
 	assert.Error(t, err)
 
-	stats, err := csv.GetDailyStats(
+	stats, err := db.GetDailyStats(
 		time.Date(2019, time.January, 2, 16,00,0,0, time.UTC),
 		time.Date(2019, time.January, 2, 18,00,0, 0, time.UTC),
 	)

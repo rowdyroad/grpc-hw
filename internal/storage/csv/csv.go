@@ -6,9 +6,12 @@ import (
 	"github.com/rowdyroad/grpc-hw/internal/storage"
 	"math"
 	"os"
+	"sort"
 	"strconv"
 	"time"
 )
+
+const maxLimit = 100
 
 type CSV struct {
 	data []storage.Record
@@ -40,22 +43,30 @@ func NewCSV(filename string) (storage.IStorage,error) {
 		}
 		data = append(data, storage.Record{Time: t, Value: v})
 	}
+	sort.Slice(data, func(i,j int) bool {
+		return data[i].Time.Before(data[j].Time)
+	})
 	return &CSV{data}, nil
 }
 
 func (c CSV) GetTotalCount(from, to time.Time, low, high float64) (int,error) {
 	var count int
+	ret := []storage.Record{}
 	for _, record := range c.data {
 		if (from.IsZero() || record.Time.Equal(from) || record.Time.After(from)) && (to.IsZero() || record.Time.Equal(to) || record.Time.Before(to)) {
 			if record.Value >= low && record.Value <= high {
-				count ++
+				count++
+				ret = append(ret, record)
 			}
 		}
 	}
 	return count,nil
 }
 
-func (c CSV) GetList(from ,to time.Time, low, high float64, offset,limit int) ([]storage.Record,error) {
+func (c CSV) GetList(from ,to time.Time, low, high float64, offset,limit uint64) ([]storage.Record,error) {
+	if limit == 0 || limit > maxLimit {
+		limit = maxLimit
+	}
 	ret := make([]storage.Record, 0, limit)
 	for _, record := range c.data {
 		if (from.IsZero() || record.Time.Equal(from) || record.Time.After(from)) && (to.IsZero() || record.Time.Equal(to) || record.Time.Before(to)) {

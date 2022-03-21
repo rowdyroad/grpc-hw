@@ -24,7 +24,7 @@ func (s *Handler) GetTotalCount(ctx context.Context, req *proto.TotalCountReques
 }
 
 func (s *Handler) GetList(ctx context.Context, req *proto.ListRequest) (*proto.ListResponse, error) {
-	list, err := s.storage.GetList(req.From.AsTime(), req.To.AsTime(), req.Low, req.High, int(req.Offset), int(req.Limit))
+	list, err := s.storage.GetList(req.From.AsTime(), req.To.AsTime(), req.Low, req.High, req.Offset, req.Limit)
 
 	ret := make([]*proto.Record, 0, len(list))
 	for _, item := range list {
@@ -47,9 +47,11 @@ func (s *Handler) GetValue(ctx context.Context, req *proto.ValueRequest) (*proto
 
 func (s *Handler) GetDailyStats(ctx context.Context, req *proto.DailyStatsRequest) (*proto.DailyStatsResponse, error) {
 	stats, err := s.storage.GetDailyStats(req.From.AsTime(), req.To.AsTime())
-	resp := proto.DailyStatsResponse{}
+	resp := proto.DailyStatsResponse{
+		Stats: map[int64]*proto.Stat{},
+	}
 	for t, stat := range stats {
-		resp.Stats[uint64(t.UnixNano())] = &proto.Stat{
+		resp.Stats[t.Unix()] = &proto.Stat{
 			Count: uint64(stat.Count),
 			Average: stat.Average,
 			Min: stat.Min,

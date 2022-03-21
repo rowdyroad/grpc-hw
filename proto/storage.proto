@@ -22,7 +22,6 @@ message TotalCountRequest {
 
 message TotalCountResponse {
     uint64 count = 1;
-    string error = 2;
 }
 
 message ListRequest {
@@ -40,7 +39,6 @@ message Record {
 }
 message ListResponse {
     repeated Record records = 1;
-    string error = 2;
 }
 
 message ValueRequest {
@@ -49,7 +47,6 @@ message ValueRequest {
 
 message ValueResponse {
     double value = 1;
-    string error = 2;
 }
 
 message DailyStatsRequest {
@@ -65,6 +62,5 @@ message Stat {
 }
 
 message DailyStatsResponse {
-    map<uint64, Stat> stats = 1;
-    string error = 2;
+    map<int64, Stat> stats = 1;
 }

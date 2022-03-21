@@ -6,7 +6,9 @@ services:
     restart: always
     volumes:
       - "db:/var/lib/postgresql/data"
-      - "$(pwd)/migrations:/docker-entrypoint-initdb.d"
+      - "./migrations:/docker-entrypoint-initdb.d"
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_DB: db
       POSTGRES_USER: root

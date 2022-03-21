@@ -6,7 +6,7 @@ import (
 	handler2 "github.com/rowdyroad/grpc-hw/internal/server/handler"
 	"github.com/rowdyroad/grpc-hw/internal/storage"
 	"github.com/rowdyroad/grpc-hw/internal/storage/csv"
-	db "github.com/rowdyroad/grpc-hw/internal/storage/pg"
+	db "github.com/rowdyroad/grpc-hw/internal/storage/db"
 	"net"
 )
 import "google.golang.org/grpc"
@@ -19,6 +19,7 @@ type Config struct {
 }
 
 type Server struct {
+	config Config
 	listener net.Listener
 	server *grpc.Server
 }
@@ -29,7 +30,7 @@ func NewServer(config Config) (*Server, error) {
 	if config.CSV != nil {
 		storage, err = csv.NewCSV(*config.CSV)
 	} else if config.DB != nil {
-		storage, err = db.NewPG(*config.DB)
+		storage, err = db.NewDB(*config.DB)
 	}
 	if err != nil {
 		return nil, err
@@ -44,6 +45,7 @@ func NewServer(config Config) (*Server, error) {
 	server := grpc.NewServer()
 	proto.RegisterStorageServer(server, handler2.NewHandler(storage))
 	return &Server{
+		config: config,
 		listener: listener,
 		server: server,
 	},nil
