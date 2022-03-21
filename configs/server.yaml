@@ -1,7 +1,7 @@
 listen: 0.0.0.0:9911
-csv: data/meterusage.csv
+csv: /usr/share/meterusage.csv
 db:
-  addr: localhost:5432
+  addr: db:5432
   user: root
   password: root
   database: db

@@ -71,6 +71,10 @@ func (c CSV) GetList(from ,to time.Time, low, high float64, offset,limit uint64)
 	for _, record := range c.data {
 		if (from.IsZero() || record.Time.Equal(from) || record.Time.After(from)) && (to.IsZero() || record.Time.Equal(to) || record.Time.Before(to)) {
 			if record.Value >= low && record.Value <= high {
+				if offset > 0 {
+					offset--
+					continue
+				}
 				ret = append(ret, record)
 				if len(ret) == cap(ret) {
 					break

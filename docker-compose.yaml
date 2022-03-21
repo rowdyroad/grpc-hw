@@ -1,6 +1,43 @@
 version: "3.9"
 
 services:
+  web:
+    build:
+      context: .
+      dockerfile: deploy/web/Dockerfile
+    depends_on:
+      - server
+    links:
+      - server
+    ports:
+      - "8099:80"
+
+  server:
+    build:
+      context: .
+      dockerfile: deploy/server/Dockerfile
+    depends_on:
+      - db
+    links:
+      - db
+    ports:
+      - "9911:9911"
+
+  client:
+    build:
+      context: .
+      dockerfile: deploy/client/Dockerfile
+    depends_on:
+      - db
+      - server
+    links:
+      - db
+      - server
+    volumes:
+      - ./data/meterusage.csv:/usr/share/meterusage.csv
+    ports:
+      - "9912:80"
+
   db:
     image: postgres
     restart: always

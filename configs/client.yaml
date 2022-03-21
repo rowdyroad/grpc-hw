@@ -1,2 +1,2 @@
-listen: 0.0.0.0:9912
-addr: 0.0.0.0:9911
+listen: :80
+addr: server:9911
