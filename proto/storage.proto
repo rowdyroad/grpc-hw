@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package grpc;
+
+option go_package = "./grpc";
+
+import "google/protobuf/timestamp.proto";
+
+service Storage {
+    rpc GetTotalCount(TotalCountRequest) returns (TotalCountResponse) {}
+    rpc GetList(ListRequest) returns (ListResponse) {}
+    rpc GetValue(ValueRequest) returns (ValueResponse) {}
+    rpc GetDailyStats(DailyStatsRequest) returns (DailyStatsResponse) {}
+}
+
+message TotalCountRequest {
+    google.protobuf.Timestamp from = 1;
+    google.protobuf.Timestamp to = 2;
+    double low = 3;
+    double high = 4;
+}
+
+message TotalCountResponse {
+    uint64 count = 1;
+    string error = 2;
+}
+
+message ListRequest {
+    google.protobuf.Timestamp from = 1;
+    google.protobuf.Timestamp to = 2;
+    double low = 3;
+    double high = 4;
+    uint64 offset = 5;
+    uint64 limit = 6;
+}
+
+message Record {
+    google.protobuf.Timestamp time = 1;
+    double value = 2;
+}
+message ListResponse {
+    repeated Record records = 1;
+    string error = 2;
+}
+
+message ValueRequest {
+    google.protobuf.Timestamp time = 1;
+}
+
+message ValueResponse {
+    double value = 1;
+    string error = 2;
+}
+
+message DailyStatsRequest {
+    google.protobuf.Timestamp from = 1;
+    google.protobuf.Timestamp to = 2;
+}
+
+message Stat {
+    uint64 count = 1;
+    double average = 2;
+    double min = 3;
+    double max = 4;
+}
+
+message DailyStatsResponse {
+    map<uint64, Stat> stats = 1;
+    string error = 2;
+}

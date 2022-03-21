@@ -1,0 +1,7 @@
+listen: 0.0.0.0:9911
+csv: data/meterusage.csv
+db:
+  addr: localhost:5432
+  user: root
+  password: root
+  database: db
