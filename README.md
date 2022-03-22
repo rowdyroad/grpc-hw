@@ -1,9 +1,9 @@
 ## REST2gRPC service 
 
 This service has implementation of:
-    - getting list of measurements with filtration by time period and value range
-    - getting single measurement by time
-    - getting daily statistics of measurements (count of measurements, average/min/max of values)
+- getting list of measurements with filtration by time period and value range
+- getting single measurement by time
+- getting daily statistics of measurements (count of measurements, average/min/max of values)
 
 # Start
 
