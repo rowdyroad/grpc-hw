@@ -14,9 +14,9 @@ Open browser http://localhost:8099
 Rest swagger documentation at http://localhost:9912/docs/index.html
 
 # Architecture
-server - gRPC service. Can be configured to csv/memory storage or postgresql storage.
-client - REST service. Bridge from http client to gRPC server.
-web - nginx with static frontend and proxy passing to client by api prefix.
+- server - gRPC service. Can be configured to csv/memory storage or postgresql storage.
+- client - REST service. Bridge from http client to gRPC server.
+- web - nginx with static frontend and proxy passing to client by api prefix.
 
 # Description
     cmd                     // services directory 
