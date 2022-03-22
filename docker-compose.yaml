@@ -2,17 +2,19 @@ version: "3.9"
 
 services:
   web:
+    restart: always
     build:
       context: .
       dockerfile: deploy/web/Dockerfile
     depends_on:
-      - server
+      - client
     links:
-      - server
+      - client
     ports:
       - "8099:80"
 
   server:
+    restart: always
     build:
       context: .
       dockerfile: deploy/server/Dockerfile
@@ -20,10 +22,13 @@ services:
       - db
     links:
       - db
+    volumes:
+      - "./data/meterusage.csv:/meterusage.csv"
     ports:
       - "9911:9911"
 
   client:
+    restart: always
     build:
       context: .
       dockerfile: deploy/client/Dockerfile
@@ -33,8 +38,6 @@ services:
     links:
       - db
       - server
-    volumes:
-      - ./data/meterusage.csv:/usr/share/meterusage.csv
     ports:
       - "9912:80"
 

@@ -25,7 +25,7 @@ export default () => {
         if (high) {
             q += "&high="+high
         }
-        fetch("/api/events?" + q).then(response=> response.json()).
+        fetch("/api/records?" + q).then(response=> response.json()).
         then(items=>{
             setData(clear ? items : [...data, ...items])
         })

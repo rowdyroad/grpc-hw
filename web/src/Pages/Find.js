@@ -5,7 +5,7 @@ export default () => {
     const [data, setData] = useState(null)
 
     useEffect(()=> {
-        fetch("/api/events/" + time + ":00Z").then(response=> response.json()).
+        fetch("/api/records/" + time + ":00Z").then(response=> response.json()).
         then(d=>{
             setData(d)
         })

@@ -1,5 +1,5 @@
 listen: 0.0.0.0:9911
-csv: /usr/share/meterusage.csv
+csv: /meterusage.csv
 db:
   addr: db:5432
   user: root
